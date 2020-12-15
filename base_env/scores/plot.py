@@ -1,14 +1,21 @@
 import matplotlib.pyplot as plt
 
-scores = []
-with open('out.score', 'r') as f:
-	for line in f:
-		scores.append(float(line))
+trainingScores = []
+testingScores = []
+reading = trainingScores
+with open("out.score", "r") as f:
+    for line in f:
+        if line == '\n':
+            reading = testingScores
+            continue
+        reading.append(float(line))
 
-xs = list(range(len(scores)))
-plt.plot(xs, scores, label='Scores')
-plt.axvline(xs[int(len(xs)/2)], color='orange', label='Training Ended')
-plt.xlabel('Episode #')
-plt.ylabel('Agent Score')
+allScores = trainingScores + testingScores
+xs = list(range(len(allScores)))
+plt.plot(xs[:len(trainingScores)], trainingScores, label="Training Scores")
+plt.plot(xs[len(trainingScores):], testingScores, label="Testing Scores", color='green')
+plt.axvline(xs[len(trainingScores)], color='orange', label='Training Ended')
+plt.xlabel("Episode #")
+plt.ylabel("Agent Score")
 plt.legend()
 plt.show()

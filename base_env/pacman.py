@@ -559,7 +559,6 @@ def readCommand(argv):
         default="KeyboardAgent",
     )
     parser.add_option(
-        "-t",
         "--textGraphics",
         action="store_true",
         dest="textGraphics",
@@ -635,6 +634,14 @@ def readCommand(argv):
         default=0,
     )
     parser.add_option(
+        "-t",
+        "--numTesting",
+        dest="numTesting",
+        type="int",
+        help=default("How many episodes are testing (suppresses output)"),
+        default=0,
+    )
+    parser.add_option(
         "--frameTime",
         dest="frameTime",
         type="float",
@@ -683,6 +690,10 @@ def readCommand(argv):
         args["numTraining"] = options.numTraining
         if "numTraining" not in agentOpts:
             agentOpts["numTraining"] = options.numTraining
+    if options.numTesting > 0:
+        args["numTesting"] = options.numTesting
+        if "numTesting" not in agentOpts:
+            agentOpts["numTesting"] = options.numTesting
     pacman = pacmanType(**agentOpts)  # Instantiate Pacman with agentArgs
     args["pacman"] = pacman
 
@@ -791,6 +802,7 @@ def runGames(
     numGames,
     record,
     numTraining=0,
+    numTesting=0,
     catchExceptions=False,
     timeout=30,
 ):
@@ -802,7 +814,7 @@ def runGames(
     games = []
 
     for i in range(numGames):
-        beQuiet = i < numTraining
+        beQuiet = i < numTraining + numTesting
         if beQuiet:
             # Suppress output and graphics
             import textDisplay

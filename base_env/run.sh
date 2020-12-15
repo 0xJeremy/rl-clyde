@@ -1,1 +1,1 @@
-python3 pacman.py -p ExperimentalAgent -x 50 -n 60 -l mediumClassic -g DirectionalGhost -k 1
+python3 pacman.py -p ExperimentalAgent -x 50 -t 50 -n 110 -l mediumClassic -g DirectionalGhost -k 1 --frameTime=0.01
