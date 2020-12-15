@@ -10,9 +10,7 @@ class ExperimentalAgent(ReinforcementAgent):
         self.featExtractor = util.lookup(extractor, globals())()
         self.qvalues = util.Counter()
         self.weights = util.Counter()
-
-    def __getWeights(self):
-        return self.weights
+        self.outfile = open('scores/out.score', 'w')
 
     def __computeValueFromQValues(self, state):
         actions = self.getLegalActions(state)
@@ -41,20 +39,8 @@ class ExperimentalAgent(ReinforcementAgent):
             outa = None
         return outa
 
-    def doAction(self, state, action):
-        """
-            Called by inherited class when
-            an action is taken in a state
-        """
-        self.lastState = state
-        self.lastAction = action
-
     def getQValue(self, state, action):
-        # return self.qvalues[(state, action)]
-        w = self.__getWeights()
-        featureVector = self.featExtractor.getFeatures(state, action)
-
-        return w * featureVector
+        return self.weights * self.featExtractor.getFeatures(state, action)
 
     def getValue(self, state):
         return self.__computeValueFromQValues(state)
@@ -66,13 +52,9 @@ class ExperimentalAgent(ReinforcementAgent):
         legalActions = self.getLegalActions(state)
         if len(legalActions) == 0:
             return None
-        if util.flipCoin(self.epsilon):
-            action = random.choice(legalActions)
-        else:
-            action = self.__computeActionFromQValues(state)
 
-        # return action
-        # action = QLearningAgent.getAction(self, state)
+        action = random.choice(legalActions) if util.flipCoin(self.epsilon) else self.__computeActionFromQValues(state)
+
         self.doAction(state, action)
         return action
 
@@ -90,7 +72,8 @@ class ExperimentalAgent(ReinforcementAgent):
             )
 
     def final(self, state):
-        # print(state)
+        print("Score: {}".format(state.getScore()))
         ReinforcementAgent.final(self, state)
-        if self.episodesSoFar == self.numTraining:
-            print("Hmmmm....")
+        # if self.episodesSoFar == self.numTraining:
+        self.outfile.write('{}\n'.format(state.getScore()))
+        

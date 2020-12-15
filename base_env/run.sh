@@ -1,1 +1,1 @@
-python3 pacman.py -p ExperimentalQAgent -a extractor=SimpleExtractor -x 200 -n 60 -l mediumClassic
+python3 pacman.py -p ExperimentalAgent -x 50 -n 60 -l mediumClassic -g DirectionalGhost -k 1
