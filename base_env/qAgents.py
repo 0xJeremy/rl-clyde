@@ -38,7 +38,6 @@ class QLearningAgent(ReinforcementAgent):
     """
 
     def __init__(self, **args):
-        "You can initialize Q-values here..."
         ReinforcementAgent.__init__(self, **args)
         self.qvalues = util.Counter()
 
@@ -57,7 +56,6 @@ class QLearningAgent(ReinforcementAgent):
           there are no legal actions, which is the case at the
           terminal state, you should return a value of 0.0.
         """
-        "*** YOUR CODE HERE ***"
         actions = self.getLegalActions(state)
         out = -float("inf")
         for a in actions:
@@ -72,7 +70,6 @@ class QLearningAgent(ReinforcementAgent):
           are no legal actions, which is the case at the terminal state,
           you should return None.
         """
-        "*** YOUR CODE HERE ***"
         actions = self.getLegalActions(state)
         out = -float("inf")
 
@@ -119,7 +116,6 @@ class QLearningAgent(ReinforcementAgent):
           NOTE: You should never call this function,
           it will be called on your behalf
         """
-        "*** YOUR CODE HERE ***"
         self.qvalues[(state, action)] = (1 - self.alpha) * (
             self.getQValue(state, action)
         ) + (self.alpha) * (
@@ -213,7 +209,6 @@ class ApproximateQAgent(PacmanQAgent):
         "Called at the end of each game."
         # call the super-class final method
         PacmanQAgent.final(self, state)
-
         # did we finish training?
         if self.episodesSoFar == self.numTraining:
             # you might want to print your weights here for debugging
@@ -226,7 +221,6 @@ class ApproximateQAgent(PacmanQAgent):
         """
            Should update your weights based on transition
         """
-        "*** YOUR CODE HERE ***"
         featureVector = self.featExtractor.getFeatures(state, action)
         actionQValue = self.getQValue(state, action)
         diff=(reward + self.discount * self.computeValueFromQValues(nextState))-actionQValue
