@@ -110,13 +110,13 @@ class ReinforcementAgent(ValueEstimationAgent):
     #    Read These Functions          #
     ####################################
 
-    def getLegalActions(self, state):
+    def getLegalActions(self, state, index = 0):
         """
           Get the actions available for a given
           state. This is what you should use to
           obtain legal actions for a state
         """
-        return self.actionFn(state)
+        return self.actionFn(state, index)
 
     def observeTransition(self, state, action, nextState, deltaReward):
         """
@@ -161,7 +161,7 @@ class ReinforcementAgent(ValueEstimationAgent):
         numTraining - number of training episodes, i.e. no learning after these many episodes
         """
         if actionFn == None:
-            actionFn = lambda state: state.getLegalActions()
+            actionFn = lambda state, index: state.getLegalActions(index)
         self.actionFn = actionFn
         self.episodesSoFar = 0
         self.accumTrainRewards = 0.0

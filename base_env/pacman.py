@@ -169,9 +169,10 @@ class GameState:
     def getNumAgents(self):
         return len(self.data.agentStates)
 
-    def getScore(self):
-        return float(self.data.score)
-
+    def getScore(self, index = 0):
+        if (index == 0):
+            return float(self.data.score)
+        return -float(self.data.score)
     def getCapsules(self):
         """
         Returns a list of positions (x,y) of the remaining capsules.
