@@ -11,7 +11,7 @@ class ExperimentalAgent(ReinforcementAgent):
         extractor="SimpleExtractor",
         numTraining=100,
         numTesting=100,
-        epsilon=0.5,
+        epsilon=0.1,
         alpha=0.5,
         gamma=1,
         **args

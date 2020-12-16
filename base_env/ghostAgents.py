@@ -106,7 +106,7 @@ class ExperDirectionalGhost(ReinforcementAgent):
         extractor="GhostExtractor",
         numTraining=100,
         numTesting=100,
-        epsilon=0.5,
+        epsilon=0.1,
         alpha=0.5,
         gamma=1,
         **args
@@ -154,7 +154,7 @@ class ExperDirectionalGhost(ReinforcementAgent):
         return outa
 
     def getQValue(self, state, action):
-        return self.weights * self.featExtractor.getFeatures(state, action)
+        return self.weights * self.featExtractor.getFeatures(state, action, self.index)
 
     def getValue(self, state):
         return self.__computeValueFromQValues(state)
@@ -178,7 +178,7 @@ class ExperDirectionalGhost(ReinforcementAgent):
         return action
 
     def update(self, state, action, nextState, reward):
-        featureVector = self.featExtractor.getFeatures(state, action)
+        featureVector = self.featExtractor.getFeatures(state, action, self.index)
 
         maxQFromNextState = self.__computeValueFromQValues(nextState)
         actionQValue = self.getQValue(state, action)
