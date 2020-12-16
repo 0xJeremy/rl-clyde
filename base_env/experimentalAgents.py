@@ -8,7 +8,7 @@ import random, util, math
 class ExperimentalAgent(ReinforcementAgent):
     def __init__(
         self,
-        extractor="SimpleExtractor",
+        extractor="ExperimentalExtractor",
         numTraining=100,
         numTesting=100,
         epsilon=0.5,
@@ -18,7 +18,6 @@ class ExperimentalAgent(ReinforcementAgent):
     ):
         ReinforcementAgent.__init__(self, **args)
         self.featExtractor = util.lookup(extractor, globals())()
-        self.qvalues = util.Counter()
         self.weights = util.Counter()
         self.filename = "scores/out.score"
         self.outfile = open(self.filename, "w")
