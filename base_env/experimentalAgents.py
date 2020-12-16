@@ -172,11 +172,12 @@ class DudAgent(ReinforcementAgent):
         if len(legalActions) == 0:
             return None
 
-        action = (
-            random.choice(legalActions)
-            if util.flipCoin(self.epsilon)
-            else self.__computeActionFromQValues(state)
-        )
+        action = Directions.STOP
+        # action = (
+        #     random.choice(legalActions)
+        #     if util.flipCoin(self.epsilon)
+        #     else self.__computeActionFromQValues(state)
+        # )
 
         self.doAction(state, action)
         return action

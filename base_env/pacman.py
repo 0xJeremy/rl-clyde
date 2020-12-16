@@ -349,7 +349,7 @@ class PacmanRules:
     the classic game rules.
     """
 
-    PACMAN_SPEED = 1
+    PACMAN_SPEED = 0.5
 
     def getLegalActions(state):
         """
@@ -705,7 +705,7 @@ def readCommand(argv):
 
     # Choose a ghost agent
     ghostType = loadAgent(options.ghost, noKeyboard)
-    args["ghosts"] = [ghostType(i + 1) for i in range(options.numGhosts)]
+    args["ghosts"] = [ghostType(i + 1,**agentOpts) for i in range(options.numGhosts)]
 
     # Choose a display format
     if options.quietGraphics:

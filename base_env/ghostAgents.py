@@ -51,7 +51,7 @@ class RandomGhost(GhostAgent):
 class DirectionalGhost(GhostAgent):
     "A ghost that prefers to rush Pacman, or flee when scared."
 
-    def __init__(self, index, prob_attack=0.99, prob_scaredFlee=0.01):
+    def __init__(self, index, prob_attack=0.99, prob_scaredFlee=0.01, **args):
         self.index = index
         self.prob_attack = prob_attack
         self.prob_scaredFlee = prob_scaredFlee
@@ -103,7 +103,7 @@ class ExperDirectionalGhost(ReinforcementAgent):
     def __init__(
         self, 
         index=1,
-        extractor="SimpleExtractor",
+        extractor="GhostExtractor",
         numTraining=100,
         numTesting=100,
         epsilon=0.5,
@@ -111,9 +111,8 @@ class ExperDirectionalGhost(ReinforcementAgent):
         gamma=1,
         **args
     ):
-        ReinforcementAgent.__init__(self,**args)
+        ReinforcementAgent.__init__(self,**args, index = index)
         self.index = index
-        print(index)
 
         self.featExtractor = util.lookup(extractor, globals())()
         self.qvalues = util.Counter()
@@ -192,10 +191,10 @@ class ExperDirectionalGhost(ReinforcementAgent):
             )
 
     def final(self, state):
-        # print("Score: {}".format(state.getScore()))
+        # print("Score: {}".format(state.getScore(self.index)))
         ReinforcementAgent.final(self, state)
         # if self.episodesSoFar == self.numTraining:
-        self.outfile.write("{}\n".format(state.getScore()))
+        self.outfile.write("{}\n".format(state.getScore(self.index)))
 
         if self.episodesSoFar == self.numTesting:
             msg = "Training Done (turning off epsilon and alpha). Beginning Testing..."
