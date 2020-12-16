@@ -103,6 +103,7 @@ class SimpleExtractor(FeatureExtractor):
         features.divideAll(10.0)
         return features
 
+
 class ExperimentalExtractor(FeatureExtractor):
     def getFeatures(self, state, action):
         food = state.getFood()
@@ -118,7 +119,6 @@ class ExperimentalExtractor(FeatureExtractor):
         dx, dy = Actions.directionToVector(action)
         next_x, next_y = int(x + dx), int(y + dy)
 
-
         # if there is no danger of ghosts then add the food feature
         # if not features["#-of-ghosts-1-step-away"] and food[next_x][next_y]:
         #     features["eats-food"] = 1.0
@@ -130,6 +130,7 @@ class ExperimentalExtractor(FeatureExtractor):
             features["closest-food"] = float(dist) / (walls.width * walls.height)
         features.divideAll(10.0)
         return features
+
 
 class GhostExtractor(FeatureExtractor):
     """
@@ -154,7 +155,6 @@ class GhostExtractor(FeatureExtractor):
         x, y = state.getPacmanPosition()
         dx, dy = Actions.directionToVector(action)
         next_x, next_y = int(x + dx), int(y + dy)
-
 
         # if there is no danger of ghosts then add the food feature
         # if not features["#-of-ghosts-1-step-away"] and food[next_x][next_y]:

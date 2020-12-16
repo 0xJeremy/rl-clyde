@@ -101,7 +101,7 @@ class ExperDirectionalGhost(ReinforcementAgent):
     "A ghost that prefers to rush Pacman, or flee when scared."
 
     def __init__(
-        self, 
+        self,
         index=1,
         extractor="GhostExtractor",
         numTraining=100,
@@ -111,7 +111,7 @@ class ExperDirectionalGhost(ReinforcementAgent):
         gamma=1,
         **args
     ):
-        ReinforcementAgent.__init__(self,**args, index = index)
+        ReinforcementAgent.__init__(self, **args, index=index)
         self.index = index
 
         self.featExtractor = util.lookup(extractor, globals())()
@@ -124,7 +124,6 @@ class ExperDirectionalGhost(ReinforcementAgent):
         self.discount = float(gamma)
         self.numTraining = numTraining + numTesting
         self.numTesting = numTesting
-
 
     def __computeValueFromQValues(self, state):
         actions = self.getLegalActions(state, self.index)
@@ -161,7 +160,6 @@ class ExperDirectionalGhost(ReinforcementAgent):
 
     def getPolicy(self, state):
         return self.__computeActionFromQValues(state)
-
 
     def getAction(self, state):
         legalActions = self.getLegalActions(state, self.index)
