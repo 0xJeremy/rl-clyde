@@ -169,9 +169,10 @@ class GameState:
     def getNumAgents(self):
         return len(self.data.agentStates)
 
-    def getScore(self):
-        return float(self.data.score)
-
+    def getScore(self, index = 0):
+        if (index == 0):
+            return float(self.data.score)
+        return -float(self.data.score)
     def getCapsules(self):
         """
         Returns a list of positions (x,y) of the remaining capsules.
@@ -348,7 +349,7 @@ class PacmanRules:
     the classic game rules.
     """
 
-    PACMAN_SPEED = 1
+    PACMAN_SPEED = 0.5
 
     def getLegalActions(state):
         """
@@ -704,7 +705,7 @@ def readCommand(argv):
 
     # Choose a ghost agent
     ghostType = loadAgent(options.ghost, noKeyboard)
-    args["ghosts"] = [ghostType(i + 1) for i in range(options.numGhosts)]
+    args["ghosts"] = [ghostType(i + 1,**agentOpts) for i in range(options.numGhosts)]
 
     # Choose a display format
     if options.quietGraphics:

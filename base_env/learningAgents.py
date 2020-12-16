@@ -110,13 +110,13 @@ class ReinforcementAgent(ValueEstimationAgent):
     #    Read These Functions          #
     ####################################
 
-    def getLegalActions(self, state):
+    def getLegalActions(self, state, index = 0):
         """
           Get the actions available for a given
           state. This is what you should use to
           obtain legal actions for a state
         """
-        return self.actionFn(state)
+        return self.actionFn(state, index)
 
     def observeTransition(self, state, action, nextState, deltaReward):
         """
@@ -152,7 +152,7 @@ class ReinforcementAgent(ValueEstimationAgent):
     def isInTesting(self):
         return not self.isInTraining()
 
-    def __init__(self, actionFn=None, numTraining=100, epsilon=0.5, alpha=0.5, gamma=1):
+    def __init__(self, actionFn=None, numTraining=100, epsilon=0.5, alpha=0.5, gamma=1, index = 0):
         """
         actionFn: Function which takes a state and returns the list of legal actions
         alpha    - learning rate
@@ -161,7 +161,7 @@ class ReinforcementAgent(ValueEstimationAgent):
         numTraining - number of training episodes, i.e. no learning after these many episodes
         """
         if actionFn == None:
-            actionFn = lambda state: state.getLegalActions()
+            actionFn = lambda state, index: state.getLegalActions(index)
         self.actionFn = actionFn
         self.episodesSoFar = 0
         self.accumTrainRewards = 0.0
@@ -170,6 +170,7 @@ class ReinforcementAgent(ValueEstimationAgent):
         self.epsilon = float(epsilon)
         self.alpha = float(alpha)
         self.discount = float(gamma)
+        self.index = index
 
     ################################
     # Controls needed for Crawler  #
@@ -200,7 +201,7 @@ class ReinforcementAgent(ValueEstimationAgent):
             The simulation should somehow ensure this is called
         """
         if not self.lastState is None:
-            reward = state.getScore() - self.lastState.getScore()
+            reward = state.getScore(self.index) - self.lastState.getScore(self.index)
             self.observeTransition(self.lastState, self.lastAction, state, reward)
         return state
 
@@ -217,7 +218,7 @@ class ReinforcementAgent(ValueEstimationAgent):
         """
           Called by Pacman game at the terminal state
         """
-        deltaReward = state.getScore() - self.lastState.getScore()
+        deltaReward = state.getScore(self.index) - self.lastState.getScore(self.index)
         self.observeTransition(self.lastState, self.lastAction, state, deltaReward)
         self.stopEpisode()
 
@@ -226,7 +227,7 @@ class ReinforcementAgent(ValueEstimationAgent):
             self.episodeStartTime = time.time()
         if not "lastWindowAccumRewards" in self.__dict__:
             self.lastWindowAccumRewards = 0.0
-        self.lastWindowAccumRewards += state.getScore()
+        self.lastWindowAccumRewards += state.getScore(self.index)
 
         NUM_EPS_UPDATE = 100
         if self.episodesSoFar % NUM_EPS_UPDATE == 0:
