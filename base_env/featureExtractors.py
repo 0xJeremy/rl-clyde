@@ -45,10 +45,6 @@ class CoordinateExtractor(FeatureExtractor):
 
 
 def closestFood(pos, food, walls):
-    """
-    closestFood -- this is similar to the function that we have
-    worked on in the search project; here its all in one place
-    """
     fringe = [(pos[0], pos[1], 0)]
     expanded = set()
     while fringe:
@@ -108,6 +104,35 @@ class SimpleExtractor(FeatureExtractor):
         features.divideAll(10.0)
         return features
 
+
+class ExperimentalExtractor(FeatureExtractor):
+    def getFeatures(self, state, action):
+        food = state.getFood()
+        walls = state.getWalls()
+        ghosts = state.getGhostPositions()
+
+        features = util.Counter()
+
+        features["bias"] = 1.0
+
+        # compute the location of pacman after he takes the action
+        x, y = state.getPacmanPosition()
+        dx, dy = Actions.directionToVector(action)
+        next_x, next_y = int(x + dx), int(y + dy)
+
+        # if there is no danger of ghosts then add the food feature
+        # if not features["#-of-ghosts-1-step-away"] and food[next_x][next_y]:
+        #     features["eats-food"] = 1.0
+
+        dist = closestFood((next_x, next_y), food, walls)
+        if dist is not None:
+            # make the distance a number less than one otherwise the update
+            # will diverge wildly
+            features["closest-food"] = float(dist) / (walls.width * walls.height)
+        features.divideAll(10.0)
+        return features
+
+
 class GhostExtractor(FeatureExtractor):
     """
     Returns simple features for a basic reflex Pacman:
@@ -134,6 +159,7 @@ class GhostExtractor(FeatureExtractor):
         dx, dy = Actions.directionToVector(action)
         next_x, next_y = int(x + dx), int(y + dy)
 
+<<<<<<< HEAD
         features["pacman-1-step-away"] = 1 if (next_x, next_y) in Actions.getLegalNeighbors(pacman, walls) else 0
         features["dist-from-pacman"] = manhattanDistance( (next_x, next_y), pacman )
 
@@ -143,4 +169,16 @@ class GhostExtractor(FeatureExtractor):
         #     # will diverge wildly
         #     features["closest-food"] = float(dist) / (walls.width * walls.height)
         # features.divideAll(10.0)
+=======
+        # if there is no danger of ghosts then add the food feature
+        # if not features["#-of-ghosts-1-step-away"] and food[next_x][next_y]:
+        #     features["eats-food"] = 1.0
+
+        dist = closestFood((next_x, next_y), food, walls)
+        if dist is not None:
+            # make the distance a number less than one otherwise the update
+            # will diverge wildly
+            features["closest-food"] = float(dist) / (walls.width * walls.height)
+        features.divideAll(10.0)
+>>>>>>> 10c31514ecbd636aa19e165f2a1661f0e07f61d7
         return features

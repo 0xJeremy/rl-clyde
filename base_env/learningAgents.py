@@ -110,7 +110,7 @@ class ReinforcementAgent(ValueEstimationAgent):
     #    Read These Functions          #
     ####################################
 
-    def getLegalActions(self, state, index = 0):
+    def getLegalActions(self, state, index=0):
         """
           Get the actions available for a given
           state. This is what you should use to
@@ -152,7 +152,9 @@ class ReinforcementAgent(ValueEstimationAgent):
     def isInTesting(self):
         return not self.isInTraining()
 
-    def __init__(self, actionFn=None, numTraining=100, epsilon=0.5, alpha=0.5, gamma=1, index = 0):
+    def __init__(
+        self, actionFn=None, numTraining=100, epsilon=0.5, alpha=0.5, gamma=1, index=0
+    ):
         """
         actionFn: Function which takes a state and returns the list of legal actions
         alpha    - learning rate
