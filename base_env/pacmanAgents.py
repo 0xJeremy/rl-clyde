@@ -40,7 +40,7 @@ class LeftTurnAgent(game.Agent):
 
 
 class GreedyAgent(Agent):
-    def __init__(self, evalFn="scoreEvaluation"):
+    def __init__(self, evalFn="scoreEvaluation", **args):
         self.evaluationFunction = util.lookup(evalFn, globals())
         assert self.evaluationFunction != None
 

@@ -26,6 +26,7 @@ class ExperimentalAgent(ReinforcementAgent):
         self.discount = float(gamma)
         self.numTraining = numTraining + numTesting
         self.numTesting = numTesting
+        self.numMoves = 0
 
     def __computeValueFromQValues(self, state):
         actions = self.getLegalActions(state)
@@ -78,6 +79,7 @@ class ExperimentalAgent(ReinforcementAgent):
         return action
 
     def update(self, state, action, nextState, reward):
+        self.numMoves += 1
         featureVector = self.featExtractor.getFeatures(state, action)
 
         maxQFromNextState = self.__computeValueFromQValues(nextState)
@@ -94,7 +96,8 @@ class ExperimentalAgent(ReinforcementAgent):
         # print("Score: {}".format(state.getScore()))
         ReinforcementAgent.final(self, state)
         # if self.episodesSoFar == self.numTraining:
-        self.outfile.write("{}\n".format(state.getScore()))
+        self.outfile.write("{}\n".format(self.numMoves))
+        self.numMoves = 0
 
         if self.episodesSoFar == self.numTesting:
             msg = "Training Done (turning off epsilon and alpha). Beginning Testing..."

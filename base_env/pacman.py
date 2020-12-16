@@ -350,7 +350,8 @@ class PacmanRules:
     the classic game rules.
     """
 
-    PACMAN_SPEED = 0.5
+    PACMAN_SPEED = 1
+    # PACMAN_SPEED = 0.5
 
     def getLegalActions(state):
         """
