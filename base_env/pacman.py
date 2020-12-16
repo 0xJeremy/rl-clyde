@@ -270,7 +270,7 @@ class GameState:
 # SCARED_TIME = 40  # Moves ghosts are scared
 SCARED_TIME = 0  # Moves ghosts are scared
 COLLISION_TOLERANCE = 0.7  # How close ghosts must be to Pacman to kill
-TIME_PENALTY = 1  # Number of points lost each round
+TIME_PENALTY = 0  # Number of points lost each round
 
 
 class ClassicGameRules:
@@ -351,7 +351,10 @@ class PacmanRules:
     """
 
     PACMAN_SPEED = 1
+<<<<<<< HEAD
     # PACMAN_SPEED = 0.5
+=======
+>>>>>>> 612184725de394f951c8f3081dff87cef44151cf
 
     def getLegalActions(state):
         """

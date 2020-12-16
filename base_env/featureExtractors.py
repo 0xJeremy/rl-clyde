@@ -13,6 +13,7 @@
 
 
 from game import Directions, Actions
+from util import manhattanDistance
 import util
 
 
@@ -147,7 +148,7 @@ class GhostExtractor(FeatureExtractor):
     - whether a ghost is one step away
     """
 
-    def getFeatures(self, state, action):
+    def getFeatures(self, state, action, index):
         # extract the grid of food and wall locations and get the ghost locations
         food = state.getFood()
         walls = state.getWalls()
@@ -157,19 +158,20 @@ class GhostExtractor(FeatureExtractor):
 
         features["bias"] = 1.0
 
-        # compute the location of pacman after he takes the action
-        x, y = state.getPacmanPosition()
+
+
+        # compute the location of ghost after he takes the action
+        x, y = state.getGhostPosition(index)
         dx, dy = Actions.directionToVector(action)
         next_x, next_y = int(x + dx), int(y + dy)
 
-        # if there is no danger of ghosts then add the food feature
-        # if not features["#-of-ghosts-1-step-away"] and food[next_x][next_y]:
-        #     features["eats-food"] = 1.0
+        features["pacman-1-step-away"] = 1 if (next_x, next_y) in Actions.getLegalNeighbors(pacman, walls) else 0
+        features["dist-from-pacman"] = manhattanDistance( (next_x, next_y), pacman )
 
-        dist = closestFood((next_x, next_y), food, walls)
-        if dist is not None:
-            # make the distance a number less than one otherwise the update
-            # will diverge wildly
-            features["closest-food"] = float(dist) / (walls.width * walls.height)
-        features.divideAll(10.0)
+        # dist = closestFood((next_x, next_y), food, walls)
+        # if dist is not None:
+        #     # make the distance a number less than one otherwise the update
+        #     # will diverge wildly
+        #     features["closest-food"] = float(dist) / (walls.width * walls.height)
+        # features.divideAll(10.0)
         return features
