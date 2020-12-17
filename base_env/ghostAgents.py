@@ -118,7 +118,7 @@ class DirectionalGhost(GhostAgent):
         return dist
 
 
-class ExperDirectionalGhost(ReinforcementAgent):
+class ExpGhost(ReinforcementAgent):
     "A ghost that prefers to rush Pacman, or flee when scared."
 
     def __init__(
@@ -127,7 +127,7 @@ class ExperDirectionalGhost(ReinforcementAgent):
         extractor="GhostExtractor",
         numTraining=100,
         numTesting=100,
-        epsilon=0.1,
+        epsilon=0.5,
         alpha=0.5,
         gamma=1,
         **args
@@ -138,13 +138,17 @@ class ExperDirectionalGhost(ReinforcementAgent):
         self.featExtractor = util.lookup(extractor, globals())()
         self.qvalues = util.Counter()
         self.weights = util.Counter()
-        self.filename = "scores/ghost_out.score"
-        self.outfile = open(self.filename, "w")
+        self.score_filename = "scores/ghost_out.score"+ str(index)
+        self.steps_filename = "scores/ghost_out.steps"+ str(index)
+        self.outfile_score = open(self.score_filename, "w")
+        self.outfile_steps = open(self.steps_filename, "w")
+
         self.epsilon = float(epsilon)
         self.alpha = float(alpha)
         self.discount = float(gamma)
         self.numTraining = numTraining + numTesting
         self.numTesting = numTesting
+        self.numMoves = 0
 
     def __computeValueFromQValues(self, state):
         actions = self.getLegalActions(state, self.index)
@@ -198,6 +202,7 @@ class ExperDirectionalGhost(ReinforcementAgent):
         return action
 
     def update(self, state, action, nextState, reward):
+        self.numMoves += 1
         featureVector = self.featExtractor.getFeatures(state, action, self.index)
 
         maxQFromNextState = self.__computeValueFromQValues(nextState)
@@ -214,14 +219,18 @@ class ExperDirectionalGhost(ReinforcementAgent):
         # print("Score: {}".format(state.getScore(self.index)))
         ReinforcementAgent.final(self, state)
         # if self.episodesSoFar == self.numTraining:
-        self.outfile.write("{}\n".format(state.getScore(self.index)))
+        self.outfile_score.write("{}\n".format(state.getScore(self.index)))
+        self.outfile_steps.write("{}\n".format(self.numMoves))
+
+        self.numMoves = 0
 
         if self.episodesSoFar == self.numTesting:
             msg = "Training Done (turning off epsilon and alpha). Beginning Testing..."
             print("%s\n%s" % (msg, "-" * len(msg)))
             self.epsilon = 0.0  # no exploration
             self.alpha = 0.0  # no learning
-            self.outfile.write("\n")
+            self.outfile_score.write("\n")
+            self.outfile_steps.write("\n")
 
         if self.episodesSoFar == self.numTraining:
             msg = "Testing Done."

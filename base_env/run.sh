@@ -1,1 +1,1 @@
-python3 pacman.py -p DudAgent -x 500 -t 500 -n 1021 -l smallClassic -g ExperDirectionalGhost -k 1 --frameTime=0.001
+python3 pacman.py -p ExperimentalAgent -x 100 -t 100 -n 2001 -l mediumClassic -g ExpGhost -k 2 --frameTime=0.001

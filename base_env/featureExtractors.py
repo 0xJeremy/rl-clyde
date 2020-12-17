@@ -139,6 +139,25 @@ class ExperimentalExtractor(FeatureExtractor):
         return features
 
 
+def distPacman(pos, pacman, walls):
+    fringe = [(pos[0], pos[1], 0)]
+    expanded = set()
+    while fringe:
+        pos_x, pos_y, dist = fringe.pop(0)
+        if (pos_x, pos_y) in expanded:
+            continue
+        expanded.add((pos_x, pos_y))
+        # if we find a food at this location then exit
+        if pacman[0] == pos_x and pacman[1] == pos_y:
+            return dist
+        # otherwise spread out from the location to its neighbours
+        nbrs = Actions.getLegalNeighbors((pos_x, pos_y), walls)
+        for nbr_x, nbr_y in nbrs:
+            fringe.append((nbr_x, nbr_y, dist + 1))
+
+    return None
+
+
 class GhostExtractor(FeatureExtractor):
     """
     Returns simple features for a basic reflex Pacman:
@@ -166,13 +185,13 @@ class GhostExtractor(FeatureExtractor):
         next_x, next_y = int(x + dx), int(y + dy)
 
         features["pacman-1-step-away"] = 1 if (next_x, next_y) in Actions.getLegalNeighbors(pacman, walls) else 0
-        features["dist-from-pacman"] = manhattanDistance( (next_x, next_y), pacman )
+        # features["dist-from-pacman"] = manhattanDistance( (next_x, next_y), pacman )
 
-        # dist = closestFood((next_x, next_y), food, walls)
-        # if dist is not None:
-        #     # make the distance a number less than one otherwise the update
-        #     # will diverge wildly
-        #     features["closest-food"] = float(dist) / (walls.width * walls.height)
-        features.divideAll(100.0)
-        # print(features)
+        dist = distPacman((next_x, next_y), pacman, walls)
+        if dist is not None:
+            # make the distance a number less than one otherwise the update
+            # will diverge wildly
+            features["dist-from-pacman"] = float(dist) / (walls.width * walls.height)
+
+        features.divideAll(10.0)
         return features

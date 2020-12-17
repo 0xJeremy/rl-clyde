@@ -21,6 +21,9 @@ import util
 
 class LeftTurnAgent(game.Agent):
     "An agent that turns left at every opportunity"
+    def __init__(self, evalFn="scoreEvaluation", **args):
+        self.evaluationFunction = util.lookup(evalFn, globals())
+        assert self.evaluationFunction != None
 
     def getAction(self, state):
         legal = state.getLegalPacmanActions()

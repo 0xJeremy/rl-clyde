@@ -269,8 +269,8 @@ class GameState:
 
 # SCARED_TIME = 40  # Moves ghosts are scared
 SCARED_TIME = 0  # Moves ghosts are scared
-COLLISION_TOLERANCE = 0.7  # How close ghosts must be to Pacman to kill
-TIME_PENALTY = -1  # Number of points lost each round
+COLLISION_TOLERANCE = .7  # How close ghosts must be to Pacman to kill
+TIME_PENALTY = 1  # Number of points lost each round
 
 
 class ClassicGameRules:
@@ -356,6 +356,7 @@ class PacmanRules:
         """
         Returns a list of possible actions.
         """
+            
         return Actions.getPossibleActions(
             state.getPacmanState().configuration, state.data.layout.walls
         )
@@ -414,7 +415,7 @@ class GhostRules:
     These functions dictate how ghosts interact with their environment.
     """
 
-    GHOST_SPEED = 1.0
+    GHOST_SPEED = 1
 
     def getLegalActions(state, ghostIndex):
         """
