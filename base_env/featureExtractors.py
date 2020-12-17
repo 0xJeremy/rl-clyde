@@ -153,12 +153,12 @@ class GhostExtractor(FeatureExtractor):
         food = state.getFood()
         walls = state.getWalls()
         pacman = state.getPacmanPosition()
+        other_ghosts = state.getGhostPositions()
+        other_ghosts.pop(index-1)
 
         features = util.Counter()
 
         features["bias"] = 1.0
-
-
 
         # compute the location of ghost after he takes the action
         x, y = state.getGhostPosition(index)
@@ -173,5 +173,6 @@ class GhostExtractor(FeatureExtractor):
         #     # make the distance a number less than one otherwise the update
         #     # will diverge wildly
         #     features["closest-food"] = float(dist) / (walls.width * walls.height)
-        # features.divideAll(10.0)
+        features.divideAll(100.0)
+        # print(features)
         return features

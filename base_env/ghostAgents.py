@@ -174,6 +174,7 @@ class ExperDirectionalGhost(ReinforcementAgent):
         return outa
 
     def getQValue(self, state, action):
+        # print(self.weights)
         return self.weights * self.featExtractor.getFeatures(state, action, self.index)
 
     def getValue(self, state):
