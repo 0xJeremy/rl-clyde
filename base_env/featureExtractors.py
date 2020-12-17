@@ -139,7 +139,7 @@ class ExperimentalExtractor(FeatureExtractor):
         return features
 
 
-def distPacman(pos, pacman, walls):
+def distOther(pos, pacman, walls):
     fringe = [(pos[0], pos[1], 0)]
     expanded = set()
     while fringe:
@@ -185,13 +185,19 @@ class GhostExtractor(FeatureExtractor):
         next_x, next_y = int(x + dx), int(y + dy)
 
         features["pacman-1-step-away"] = 1 if (next_x, next_y) in Actions.getLegalNeighbors(pacman, walls) else 0
-        # features["dist-from-pacman"] = manhattanDistance( (next_x, next_y), pacman )
+        # features["dist-from-pacman-manhattan"] = float(manhattanDistance(pacman, (next_x, next_y)))/(walls.width * walls.height)
 
-        dist = distPacman((next_x, next_y), pacman, walls)
+        dist = distOther((next_x, next_y), pacman, walls)
         if dist is not None:
-            # make the distance a number less than one otherwise the update
-            # will diverge wildly
             features["dist-from-pacman"] = float(dist) / (walls.width * walls.height)
+
+        if (len(other_ghosts) > 0):
+            for i,g in enumerate(other_ghosts):
+                features["ghosts-1-step-away"] += 1 if (next_x, next_y) in Actions.getLegalNeighbors(g, walls) else 0
+
+                dist = distOther((next_x, next_y), g, walls)
+                if dist is not None:
+                    features["dist-from-ghost"+str(i)] = float(dist) / (walls.width * walls.height)
 
         features.divideAll(10.0)
         return features
