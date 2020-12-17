@@ -47,27 +47,6 @@ class RandomGhost(GhostAgent):
         dist.normalize()
         return dist
 
-class DudGhost(GhostAgent):
-    def __init__(self,
-        index=1,
-        extractor="GhostExtractor",
-        numTraining=100,
-        numTesting=100,
-        epsilon=0.5,
-        alpha=0.5,
-        gamma=1,
-        **args):
-        self.index = index
-    def getDistribution(self, state):
-        dist = util.Counter()
-        for a in state.getLegalActions(self.index):
-            if a == 'East':
-                dist['East'] = 1.0
-                return dist
-            if a == 'West':
-                dist['West'] = 1.0
-                return dist
-
 
 class DirectionalGhost(GhostAgent):
     "A ghost that prefers to rush Pacman, or flee when scared."
@@ -117,6 +96,27 @@ class DirectionalGhost(GhostAgent):
         dist.normalize()
         return dist
 
+class DudGhost(GhostAgent):
+    def __init__(self,
+        index=1,
+        extractor="GhostExtractor",
+        numTraining=100,
+        numTesting=100,
+        epsilon=0.5,
+        alpha=0.5,
+        gamma=1,
+        **args):
+        self.index = index
+        
+    def getDistribution(self, state):
+        dist = util.Counter()
+        for a in state.getLegalActions(self.index):
+            if a == 'East':
+                dist['East'] = 1.0
+                return dist
+            if a == 'West':
+                dist['West'] = 1.0
+                return dist
 
 class ExperDirectionalGhost(ReinforcementAgent):
     "A ghost that prefers to rush Pacman, or flee when scared."
@@ -170,7 +170,7 @@ class ExperDirectionalGhost(ReinforcementAgent):
         if out != -float("inf"):
             outa = random.choice(lis)
         else:
-            outa = None
+            outa = random.choice(actions)
         return outa
 
     def getQValue(self, state, action):
