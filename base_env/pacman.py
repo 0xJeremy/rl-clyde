@@ -351,10 +351,6 @@ class PacmanRules:
     """
 
     PACMAN_SPEED = 1
-<<<<<<< HEAD
-    # PACMAN_SPEED = 0.5
-=======
->>>>>>> 612184725de394f951c8f3081dff87cef44151cf
 
     def getLegalActions(state):
         """
