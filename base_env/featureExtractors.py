@@ -153,7 +153,8 @@ class GhostExtractor(FeatureExtractor):
         food = state.getFood()
         walls = state.getWalls()
         pacman = state.getPacmanPosition()
-
+        other_ghosts = state.getGhostPositions()
+        other_ghosts.pop(index-1)
         features = util.Counter()
 
         features["bias"] = 1.0
@@ -167,7 +168,9 @@ class GhostExtractor(FeatureExtractor):
 
         features["pacman-1-step-away"] = 1 if (next_x, next_y) in Actions.getLegalNeighbors(pacman, walls) else 0
         features["dist-from-pacman"] = manhattanDistance( (next_x, next_y), pacman )
-
+        features["ghosts-1-step-away"] = sum(
+            (next_x, next_y) in Actions.getLegalNeighbors(g, walls) for g in other_ghosts
+        )
         # dist = closestFood((next_x, next_y), food, walls)
         # if dist is not None:
         #     # make the distance a number less than one otherwise the update
