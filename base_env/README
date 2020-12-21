@@ -1,0 +1,42 @@
+COMP 138: Reinforcement Learning
+Final Project
+Ben London and Jeremy Kanovsky
+
+Requirements:
+Python 3.7+
+numpy
+
+How to run:
+
+To run the base game:
+  `python3 pacamn.py`
+
+Included is a file `run.sh`
+Our recommended settings for that file are:
+  python3 pacman.py -p ExperimentalAgent -x 100 -t 100 -n 205 -l mediumClassic -g ExpGhost -k [1, 2] --frameTime=0.01
+
+In this file you can specify a variety of options for the pacman.py game:
+  python3 pacman.py [-p <pacman_agent>] [-x <training> -t <testing> -n <total>] [-l <board>] [-g <ghost_agent>] [-k <num_ghosts>] --frameTime=0.01
+
+  For the -p option, you must choose a Pac-Man agent. 
+  There are several options to choose from for our project:
+    GreedyAgent - Each move maximizes reward
+    DudAgent - Pac-Man doesn't move
+    ExperimentalAgent - Q-learning RL agent
+
+  The -x -t -n options apply to episodes for learning agents.
+    Any positive integer value can be provided for the number of training episodes (-x) or the number of testing episodes (-t).
+    However, the total number of epsiodes (n) must be > the sum of training and testing episodes.
+    The remaining episodes ( n - (x + t) ) will be run in realtime in a GUI.
+
+  The -l option allows the choosing of a layout/game map.
+  The options availible are all listed in the layouts directory.
+
+  The -g options allows for the choice of ghost agents:
+  The options availible are:
+        DudGhost - Ghost doesn't move
+        DirectionalGhost - Rushes pacman
+        ExpGhost - Q-learning RL agent
+
+  The -k option allows for the choice of the number of ghosts:
+    Each map has a maximum number of ghosts allowed. If k > max, then only the max will be displayed
